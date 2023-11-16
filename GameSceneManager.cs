@@ -44,4 +44,5 @@ public class GameSceneManager : MonoBehaviour
             GameStateController.Instance.SelectedCardIdList.Clear ();
         }
     }
+    //XV—p
 }
