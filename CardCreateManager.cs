@@ -148,8 +148,8 @@ public class CardCreateManager : MonoBehaviour
         card.mRt.sizeDelta = this.GridLayout.cellSize;
 
         //カードの移動先を設定
-        float posX = (this.GridLayout.cellSize.x * this.mWidthIdx) + (this.GridLayout.spacing.x * (this.mWidthIdx + 1));
-        float posY = ((this.GridLayout.cellSize.y * this.mHelgthIdx) + (this.GridLayout.spacing.y * this.mHelgthIdx)) * -1f;
+        float posX = (this.GridLayout.cellSize.x * this.mWidthIdx) + (this.GridLayout.spacing.x * (this.mWidthIdx + 1)); //初期位置として335になるよう修正する
+        float posY = ((this.GridLayout.cellSize.y * this.mHelgthIdx) + (this.GridLayout.spacing.y * this.mHelgthIdx)) * -1f;　//初期位置として0になるよう調整
 
         //DOAnchorPosでアニメーションを行う
         card.mRt.DOAnchorPos(new Vector2(posX, posY), this.DEAL_CARD_TIME)

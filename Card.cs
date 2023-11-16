@@ -68,22 +68,31 @@ public class Card : MonoBehaviour
 
         Debug.Log("OnClick");
 
-        //回転処理を行う
-        this.onRotate(() =>
-        {
-            //選択判定フラグを有効にする
-            this.mIsSelected = true;
-
-            //カードを表面にする
-            this.CardImage.sprite = this.mData.ImgSprite;
-
-            // Y座標をもとに戻す
-            this.onReturnRotate(() =>
+        //拡大処理を行う
+        this.kakudai(() =>
+        {         
+            //回転処理を行う
+            this.onRotate(() =>
             {
-                //選択したCardIdを保存
-                GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);
+                //選択判定フラグを有効にする
+                this.mIsSelected = true;
+
+                //カードを表面にする
+                this.CardImage.sprite = this.mData.ImgSprite;
+
+                // Y座標をもとに戻す
+                this.onReturnRotate(() =>
+                {
+                    //拡大を元に戻す
+                    this.syusyuku(() =>
+                    {
+                        //選択したCardIdを保存
+                        GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);
+                    });
+                });
             });
         });
+
 
         /*//Dotweenで回転処理を行う
         this.mRt.DORotate(new Vector3(0f, 90f, 0f), 0.2f)
@@ -108,6 +117,43 @@ public class Card : MonoBehaviour
         //選択したCardIdを保存
         GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);*/
     }
+
+    ///<summary>
+    ///カードを中央に拡大表示する
+    /// </summary>
+    private void kakudai(Action onComp)
+    {
+        //カードを中央に移動させる
+        //this.mRt.DOMove(new Vecter3(0,0,0),1)
+        //カードを拡大させる
+        this.mRt.DOScale(new Vector3(2,2,2),1)
+            //拡大が終了したら
+            .OnComplete(() =>
+            {
+                if (onComp != null)
+                {
+                    onComp();
+                }
+            });
+    }
+
+    ///<summary>
+    ///カードを拡大表示を元に戻す
+    /// </summary>
+    private void syusyuku(Action onComp)
+    {
+        //カードを収縮させる
+        this.mRt.DOScale(new Vector3(1, 1, 1), 1)
+            //収縮が終了したら
+            .OnComplete(() =>
+            {
+                if (onComp != null)
+                {
+                    onComp();
+                }
+            });
+    }
+
 
 
     ///<summary>
