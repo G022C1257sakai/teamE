@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
+// 11/17 XV
+
 public class Card : MonoBehaviour
 {
 

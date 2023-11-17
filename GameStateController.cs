@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 11/17 更新
+
 public class GameStateController : MonoBehaviour
 {
     //選択されたカードIDリスト
@@ -23,5 +25,4 @@ public class GameStateController : MonoBehaviour
         }
     }
 
-    //更新用
 }
