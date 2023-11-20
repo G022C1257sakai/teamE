@@ -125,10 +125,14 @@ public class Card : MonoBehaviour
     /// </summary>
     private void kakudai(Action onComp)
     {
+
         //カードを中央に移動させる
-        //this.mRt.DOMove(new Vecter3(0,0,0),1)
+        Vector3 hozon = this.transform.position;
+        this.mRt.DOMove(new Vector3(0, 0, 0), 1);
+
         //カードを拡大させる
         this.mRt.DOScale(new Vector3(2,2,2),1)
+
             //拡大が終了したら
             .OnComplete(() =>
             {
@@ -140,13 +144,18 @@ public class Card : MonoBehaviour
     }
 
     ///<summary>
-    ///カードを拡大表示を元に戻す
+    ///カードを元に戻す
     /// </summary>
     private void syusyuku(Action onComp)
     {
+
+
         //カードを収縮させる
         this.mRt.DOScale(new Vector3(1, 1, 1), 1)
-            //収縮が終了したら
+        //カードを元の位置に移動させる
+        //this.mRt.DOMove(hozon , 1)
+
+            //移動が終了したら
             .OnComplete(() =>
             {
                 if (onComp != null)

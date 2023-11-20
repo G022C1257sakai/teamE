@@ -8,6 +8,15 @@ using DG.Tweening;
 
 // 11/17 更新
 
+// 11/20 にもう一度全体を更新する
+
+//GameManagerにアタッチ
+//PrefabにCard.csをセット
+//CardCreateParentにCardFieldをセット
+//GridLayoutにCardFieldをセット
+
+
+
 public class CardCreateManager : MonoBehaviour
 {
     //生成するCardオブジェクト
