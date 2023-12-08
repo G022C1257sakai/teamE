@@ -145,6 +145,7 @@ public class CardCreateManager : MonoBehaviour
     /// </summary>
     private void mSetDealCardAnime()
     {
+
         var _cardData = this.mRandomCardDataList[this.mIndex];
 
         //InstantiateでCardオブジェクトを生成
@@ -158,8 +159,8 @@ public class CardCreateManager : MonoBehaviour
         card.mRt.sizeDelta = this.GridLayout.cellSize;
 
         //カードの移動先を設定
-        float posX = (this.GridLayout.cellSize.x * this.mWidthIdx) + (this.GridLayout.spacing.x * (this.mWidthIdx + 1)); //初期位置として335になるよう修正する
-        float posY = ((this.GridLayout.cellSize.y * this.mHelgthIdx) + (this.GridLayout.spacing.y * this.mHelgthIdx)) * -1f;　//初期位置として0になるよう調整
+        float posX = (this.GridLayout.cellSize.x * this.mWidthIdx) + (this.GridLayout.spacing.x * this.mWidthIdx + 335) ; //初期位置として-335になるよう修正する
+        float posY = ((this.GridLayout.cellSize.y * this.mHelgthIdx) + (this.GridLayout.spacing.y * this.mHelgthIdx - 335)) * -1f;　//初期位置として0になるよう調整
 
         //DOAnchorPosでアニメーションを行う
         card.mRt.DOAnchorPos(new Vector2(posX, posY), this.DEAL_CARD_TIME)
@@ -178,6 +179,8 @@ public class CardCreateManager : MonoBehaviour
                 {
                     //GridLayoutを有効にし、生成処理を終了する
                     this.GridLayout.enabled = true;
+
+
                 }
                 else
                 {

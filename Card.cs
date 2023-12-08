@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-// 11/17 更新
+
+
+// 11/20 最終更新
 
 public class Card : MonoBehaviour
 {
@@ -24,11 +26,36 @@ public class Card : MonoBehaviour
 
     public bool IsSelected => this.mIsSelected;
 
+
+    //中央表示しているカードの判定
+    private bool dIsSelected = false;
+
     //カード情報
     private CardData mData;
 
     // 座標情報
     public RectTransform mRt;
+
+    //移動前の座標保存変数
+    private Vector3 sevepos;
+
+    //移動前の選択オブジェクトの座標を保存
+
+
+    public Vector3 setpos
+    {
+        set { sevepos = value; }
+
+
+    }
+    public Vector3 getpos
+    {
+        get { return sevepos; }
+    }
+
+
+
+
 
 
 
@@ -48,13 +75,24 @@ public class Card : MonoBehaviour
         //選択判定フラグを初期化する
         this.mIsSelected = false;
 
+        //中央表示フラグを初期化する
+        this.dIsSelected = true;
+
         //アルファ値を1に設定
         this.CanGroup.alpha = 1;
 
         //座標情報を取得しておく
         this.mRt = this.GetComponent<RectTransform>();
 
+        //初期座標の取得
+        sevepos = transform.localPosition;
+
     }
+
+
+
+
+
 
 
     ///<summary>
@@ -62,76 +100,101 @@ public class Card : MonoBehaviour
     ///</summary>
     public void OnClick()
     {
+
         //カードが表面になっていた場合は無効
         if (this.mIsSelected)
         {
             return;
         }
 
+
         Debug.Log("OnClick");
 
-        //拡大処理を行う
-        this.kakudai(() =>
-        {         
-            //回転処理を行う
-            this.onRotate(() =>
-            {
-                //選択判定フラグを有効にする
-                this.mIsSelected = true;
 
-                //カードを表面にする
-                this.CardImage.sprite = this.mData.ImgSprite;
+        //中央に拡大表示する
+        this.center(() =>
+        {
+            //中央表示フラグを有効にする
+            this.dIsSelected = false;
 
-                // Y座標をもとに戻す
-                this.onReturnRotate(() =>
-                {
-                    //拡大を元に戻す
-                    this.syusyuku(() =>
-                    {
-                        //選択したCardIdを保存
-                        GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);
-                    });
-                });
-            });
         });
 
 
-        /*//Dotweenで回転処理を行う
-        this.mRt.DORotate(new Vector3(0f, 90f, 0f), 0.2f)
-            //回転が完了したら
-            .OnComplete(() =>
-            {
-                //選択判定フラグを有効にする
-                this.mIsSelected = true;
-
-                //カードを表面にする
-                this.CardImage.sprite = this.mData.ImgSprite;
-                // Y座標をもとに戻す
-                this.onReturnRotate();
-            });*/
-
-        /*//選択判定フラグを有効にする
-        this.mIsSelected = true;
-
-        //カードを表面にする
-        this.CardImage.sprite = this.mData.ImgSprite;
-        
-        //選択したCardIdを保存
-        GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);*/
     }
+
+    public void OnSecondClick()
+    {
+
+        //カードが表面になっていた場合は無効
+        if (this.dIsSelected)
+        {
+            return;
+        }
+
+        //回転処理を行う
+        this.onRotate(() => {
+
+            //選択判定フラグを有効にする
+            this.mIsSelected = true;
+
+            //カードを表面にする
+            this.CardImage.sprite = this.mData.ImgSprite;
+
+
+            // Y座標をもとに戻す
+            this.onReturnRotate(() => {
+
+                //選択したCardIdを保存
+                GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);
+            });
+
+
+        });
+
+        //元の位置に戻す
+        this.former(() =>
+        {
+            //中央表示フラグを有効にする
+            this.dIsSelected = true;
+        });
+
+    }
+
+
+
+
+
+
+
 
     ///<summary>
     ///カードを中央に拡大表示する
     /// </summary>
-    private void kakudai(Action onComp)
+    private void center(Action onComp)
     {
+        UnityEngine.Vector3 sevepos;
 
-        //カードを中央に移動させる
-        Vector3 hozon = this.transform.position;
-        this.mRt.DOMove(new Vector3(0, 0, 0), 1);
+        //set呼出し
+        //Vector3 sevepos= this.transform.position;
+        
+
+        
+
+        var sequence = DOTween.Sequence();
+        sequence.Append(
 
         //カードを拡大させる
-        this.mRt.DOScale(new Vector3(2,2,2),1)
+        this.mRt.DOScale(new Vector3(2f, 2f, 2f), 1f)
+
+            );
+
+        //  Join()で追加する
+        sequence.Join(
+
+        //カードを中央に移動させる
+        this.mRt.DOLocalMove(new Vector3(0f, 200f), 1f)
+
+            )
 
             //拡大が終了したら
             .OnComplete(() =>
@@ -146,20 +209,37 @@ public class Card : MonoBehaviour
     ///<summary>
     ///カードを元に戻す
     /// </summary>
-    private void syusyuku(Action onComp)
+    private void former(Action onComp)
     {
+        UnityEngine.Vector3 lodepos;
+
+        //get呼出
+        lodepos = this.getpos;
+
+
+        var sequence = DOTween.Sequence();
+        sequence.Append(       
 
 
         //カードを収縮させる
-        this.mRt.DOScale(new Vector3(1, 1, 1), 1)
-        //カードを元の位置に移動させる
-        //this.mRt.DOMove(hozon , 1)
+        this.mRt.DOScale(new Vector3(1f, 1f, 1f), 1f)
+
+        );
+
+        //  Join()で追加する
+        sequence.Join(        
+
+        //カードをもとの位置に戻す
+        this.mRt.DOLocalMove(sevepos, 1f)
+
+        )
 
             //移動が終了したら
             .OnComplete(() =>
             {
                 if (onComp != null)
                 {
+                    Debug.Log("OnComp");
                     onComp();
                 }
             });
@@ -191,6 +271,7 @@ public class Card : MonoBehaviour
     private void onReturnRotate(Action onComp)
     {
         this.mRt.DORotate(new Vector3(0f, 0f, 0f), 0.2f)
+
             //回転が終わったら
             .OnComplete(() =>
             {
@@ -202,6 +283,7 @@ public class Card : MonoBehaviour
                 //GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);
             });
     }
+
 
 
 
@@ -243,6 +325,24 @@ public class Card : MonoBehaviour
         //アルファ値を0に設定（非表示）
         this.CanGroup.alpha = 0;
     }
+
+
+    /*///<summary>
+    ///座標受渡し　ゲッター
+    /// </summary>
+    private Vector3 Getter()
+    {
+        return sevepos;
+    }
+
+    ///<summary>
+    ///座標受渡し　セッター
+    /// </summary>
+    private void Setter(Vector3 value)
+    {
+        sevepos = value;
+    }*/
+
 
 }
 
