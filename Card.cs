@@ -84,18 +84,82 @@ public class Card : MonoBehaviour
         //座標情報を取得しておく
         this.mRt = this.GetComponent<RectTransform>();
 
+
+
+    }
+
+    void OnClick()
+    {
+        StartCoroutine(CardMove());
+    }
+
+
+    ///<summary>
+    ///選択された時の処理
+    ///</summary>
+    public IEnumerator　CardMove()
+    {
+        //カードが表面になっていた場合は無効
+        if (this.mIsSelected)
+        {
+            yield break;
+        }
+
+
+        Debug.Log("OnClick");
+
         //初期座標の取得
         sevepos = transform.localPosition;
 
+
+        //中央に拡大表示する
+        this.center(() =>
+        {
+            //中央表示フラグを有効にする
+            this.dIsSelected = false;
+
+        });
+
+        //クリック待機
+        yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+
+        //カードが表面になっていた場合は無効
+        if (this.dIsSelected && this.mIsSelected)
+        {
+            yield break;
+        }
+
+        //回転処理を行う
+        this.onRotate(() => {
+
+            //選択判定フラグを有効にする
+            this.mIsSelected = true;
+
+            //カードを表面にする
+            this.CardImage.sprite = this.mData.ImgSprite;
+
+
+            // Y座標をもとに戻す
+            this.onReturnRotate(() => {
+
+                //選択したCardIdを保存
+                GameStateController.Instance.SelectedCardIdList.Add(this.mData.Id);
+            });
+
+
+        });
+
+        //元の位置に戻す
+        this.former(() =>
+        {
+            //中央表示フラグを有効にする
+            this.dIsSelected = true;
+        });
     }
 
 
 
-
-
-
-
-    ///<summary>
+    /*///<summary>
     ///選択された時の処理
     ///</summary>
     public void OnClick()
@@ -109,6 +173,9 @@ public class Card : MonoBehaviour
 
 
         Debug.Log("OnClick");
+
+        //初期座標の取得
+        sevepos = transform.localPosition;
 
 
         //中央に拡大表示する
@@ -126,7 +193,7 @@ public class Card : MonoBehaviour
     {
 
         //カードが表面になっていた場合は無効
-        if (this.dIsSelected)
+        if (this.dIsSelected && this.mIsSelected)
         {
             return;
         }
@@ -158,7 +225,7 @@ public class Card : MonoBehaviour
             this.dIsSelected = true;
         });
 
-    }
+    }*/
 
 
 
