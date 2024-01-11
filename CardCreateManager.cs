@@ -6,16 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-// 11/17 更新
-
-// 11/20 にもう一度全体を更新する
-
-//GameManagerにアタッチ
-//PrefabにCard.csをセット
-//CardCreateParentにCardFieldをセット
-//GridLayoutにCardFieldをセット
-
-
+// 1/11更新
 
 public class CardCreateManager : MonoBehaviour
 {
@@ -26,10 +17,10 @@ public class CardCreateManager : MonoBehaviour
     public RectTransform CardCreateParent;
 
     //生成したカードオブジェクトを保存する
-    public List<Card> CardList = new List<Card> ();
+    public List<Card> CardList = new List<Card>();
 
     //カードの情報の順位をランダムに変更したリスト
-    private List<CardData> mRandomCardDataList = new List<CardData> ();
+    private List<CardData> mRandomCardDataList = new List<CardData>();
 
     //GrodLayoutGroup
     public GridLayoutGroup GridLayout;
@@ -47,11 +38,14 @@ public class CardCreateManager : MonoBehaviour
 
 
 
+
     /// <summary>
     ///カードを生成する
     /// </summary>
     public void CreateCard()
     {
+
+
         //カード情報リスト
         List<CardData> cardDataList = new List<CardData>();
 
@@ -130,7 +124,7 @@ public class CardCreateManager : MonoBehaviour
                 _card.SetInvisible();
             }
             //カードが表面 && 獲得していないカードは裏面表示にする
-            else　if(_card.IsSelected)
+            else if (_card.IsSelected)
             {
                 //カードを裏面表示にする
                 _card.SetHide();
@@ -150,7 +144,7 @@ public class CardCreateManager : MonoBehaviour
 
         //InstantiateでCardオブジェクトを生成
         Card card = Instantiate<Card>(this.CardPrefad, this.CardCreateParent);
-        
+
         //データを設定する
         card.Set(_cardData);
         //カードの初期値を設定(画面外にする)
@@ -159,8 +153,8 @@ public class CardCreateManager : MonoBehaviour
         card.mRt.sizeDelta = this.GridLayout.cellSize;
 
         //カードの移動先を設定
-        float posX = (this.GridLayout.cellSize.x * this.mWidthIdx) + (this.GridLayout.spacing.x * this.mWidthIdx + 335) ; //初期位置として-335になるよう修正する
-        float posY = ((this.GridLayout.cellSize.y * this.mHelgthIdx) + (this.GridLayout.spacing.y * this.mHelgthIdx - 335)) * -1f;　//初期位置として0になるよう調整
+        float posX = (this.GridLayout.cellSize.x * this.mWidthIdx) + (this.GridLayout.spacing.x * this.mWidthIdx + 335); //初期位置として-335になるよう修正する
+        float posY = ((this.GridLayout.cellSize.y * this.mHelgthIdx) + (this.GridLayout.spacing.y * this.mHelgthIdx - 175)) * -1f;　//初期位置として0になるよう調整
 
         //DOAnchorPosでアニメーションを行う
         card.mRt.DOAnchorPos(new Vector2(posX, posY), this.DEAL_CARD_TIME)
@@ -175,17 +169,15 @@ public class CardCreateManager : MonoBehaviour
                 this.mWidthIdx++;
 
                 //生成インデックスがリストの最大値を迎えたら
-                if (this.mIndex >= this.mRandomCardDataList.Count) 
+                if (this.mIndex >= this.mRandomCardDataList.Count)
                 {
                     //GridLayoutを有効にし、生成処理を終了する
                     this.GridLayout.enabled = true;
-
-
                 }
                 else
                 {
                     //GridLayoutの折り返し地点に来たら
-                    if(this.mIndex % this.GridLayout.constraintCount == 0)
+                    if (this.mIndex % this.GridLayout.constraintCount == 0)
                     {
                         //高さの生成個所を更新
                         this.mHelgthIdx++;

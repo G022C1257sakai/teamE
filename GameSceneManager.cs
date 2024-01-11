@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
+// 1/11更新
 
 public class GameSceneManager : MonoBehaviour
 {
@@ -24,14 +25,14 @@ public class GameSceneManager : MonoBehaviour
     void Update()
     {
         //選択したカードが2枚以上になったら
-        if(GameStateController.Instance.SelectedCardIdList.Count >= 2)
+        if (GameStateController.Instance.SelectedCardIdList.Count >= 2)
         {
             //最初に選択したCardIDを取得する
             int selectedId = GameStateController.Instance.SelectedCardIdList[0];
             Debug.Log($"Contains! {selectedId}");
 
             //２枚目のカードと一緒だったら
-            if(selectedId == GameStateController.Instance.SelectedCardIdList[1])
+            if (selectedId == GameStateController.Instance.SelectedCardIdList[1])
             {
                 Debug.Log($"Contains!{selectedId}");
                 //一致したカードIDを保存する
@@ -41,7 +42,7 @@ public class GameSceneManager : MonoBehaviour
             this.CardCreate.HideCardList(this.mContainCardIdList);
 
             //選択したカードリストを初期化する
-            GameStateController.Instance.SelectedCardIdList.Clear ();
+            GameStateController.Instance.SelectedCardIdList.Clear();
         }
     }
     //更新用

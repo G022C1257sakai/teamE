@@ -5,13 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-
-
-// 11/20 最終更新
+// 1/11更新
 
 public class Card : MonoBehaviour
 {
-
     //カードのID
     public int Id;
 
@@ -26,7 +23,6 @@ public class Card : MonoBehaviour
 
     public bool IsSelected => this.mIsSelected;
 
-
     //中央表示しているカードの判定
     private bool dIsSelected = false;
 
@@ -39,19 +35,9 @@ public class Card : MonoBehaviour
     //移動前の座標保存変数
     private Vector3 sevepos;
 
-    //移動前の選択オブジェクトの座標を保存
 
 
-    public Vector3 setpos
-    {
-        set { sevepos = value; }
 
-
-    }
-    public Vector3 getpos
-    {
-        get { return sevepos; }
-    }
 
 
 
@@ -83,22 +69,23 @@ public class Card : MonoBehaviour
 
         //座標情報を取得しておく
         this.mRt = this.GetComponent<RectTransform>();
-
-
-
     }
 
-    void OnClick()
+    //コールチン開始
+    public void OnClick()
     {
         StartCoroutine(CardMove());
+        Debug.Log("OnClick");
     }
 
 
     ///<summary>
     ///選択された時の処理
     ///</summary>
-    public IEnumerator　CardMove()
+    public IEnumerator CardMove()
     {
+
+
         //カードが表面になっていた場合は無効
         if (this.mIsSelected)
         {
@@ -106,7 +93,7 @@ public class Card : MonoBehaviour
         }
 
 
-        Debug.Log("OnClick");
+
 
         //初期座標の取得
         sevepos = transform.localPosition;
@@ -239,13 +226,6 @@ public class Card : MonoBehaviour
     /// </summary>
     private void center(Action onComp)
     {
-        UnityEngine.Vector3 sevepos;
-
-        //set呼出し
-        //Vector3 sevepos= this.transform.position;
-        
-
-        
 
         var sequence = DOTween.Sequence();
         sequence.Append(
@@ -253,13 +233,13 @@ public class Card : MonoBehaviour
         //カードを拡大させる
         this.mRt.DOScale(new Vector3(2f, 2f, 2f), 1f)
 
-            );
+        );
 
         //  Join()で追加する
         sequence.Join(
 
         //カードを中央に移動させる
-        this.mRt.DOLocalMove(new Vector3(0f, 200f), 1f)
+        this.mRt.DOLocalMove(new Vector3(0f, 0f), 1f)
 
             )
 
@@ -278,14 +258,8 @@ public class Card : MonoBehaviour
     /// </summary>
     private void former(Action onComp)
     {
-        UnityEngine.Vector3 lodepos;
-
-        //get呼出
-        lodepos = this.getpos;
-
-
         var sequence = DOTween.Sequence();
-        sequence.Append(       
+        sequence.Append(
 
 
         //カードを収縮させる
@@ -294,7 +268,7 @@ public class Card : MonoBehaviour
         );
 
         //  Join()で追加する
-        sequence.Join(        
+        sequence.Join(
 
         //カードをもとの位置に戻す
         this.mRt.DOLocalMove(sevepos, 1f)
@@ -394,36 +368,21 @@ public class Card : MonoBehaviour
     }
 
 
-    /*///<summary>
-    ///座標受渡し　ゲッター
-    /// </summary>
-    private Vector3 Getter()
-    {
-        return sevepos;
-    }
-
-    ///<summary>
-    ///座標受渡し　セッター
-    /// </summary>
-    private void Setter(Vector3 value)
-    {
-        sevepos = value;
-    }*/
-
-
 }
 
 
 ///<summary>
 ///カードの情報クラス
 ///</summary>
-public class CardData {
+public class CardData
+{
     //カードのID //setしたデータを抽出する
     public int Id { get; private set; }
     //画像
     public Sprite ImgSprite { get; private set; }
 
-    public CardData(int _id, Sprite _sprite) {
+    public CardData(int _id, Sprite _sprite)
+    {
         this.Id = _id;
         this.ImgSprite = _sprite;
     }
